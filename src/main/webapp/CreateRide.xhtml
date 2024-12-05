@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view>
+	<h:head>
+		<title>Crear Rides</title>
+	</h:head>
+	<h:body>
+		<h:form>
+			<table>
+				<tr>
+					<td>Departing city:</td>
+					<td><h:inputText id="from" value="#{ridebean.from}"></h:inputText></td>
+				</tr>
+				<tr>
+					<td>Arrival city:</td>
+					<td><h:inputText id="to" value="#{ridebean.to}"></h:inputText></td>
+				</tr>
+				<tr>
+					<td>Number of seats:</td>
+					<td><h:inputText id="seats" value="#{ridebean.seats}"></h:inputText></td>
+				</tr>
+				<tr>
+					<td>Price:</td>
+					<td><h:inputText id="price" value="#{ridebean.price}"></h:inputText></td>
+				</tr>
+				<tr>
+					<td>Fecha (dd/MM/yyyy):</td>
+					<td><p:calendar id="date" value="#{ridebean.date}"
+							navigator="true" pattern="dd/MM/yyyy" mode="inline" /></td>
+				</tr>
+			</table>
+			<p>
+				<h:commandButton value="Create" action="#{ridebean.crear}" />
+				<h:commandButton value="Close" action="#{indexbean.index}" />
+			</p>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
