@@ -11,6 +11,7 @@
 			<to-view-id>/CreateRide.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	<!--
 	<navigation-rule>
 		<display-name>Index.xhtml</display-name>
 		<from-view-id>/Index.xhtml</from-view-id>
@@ -22,11 +23,13 @@
 	<navigation-rule>
 		<display-name>QueryRide.xhtml</display-name>
 		<from-view-id>/QueryRide.xhtml</from-view-id>
+			
 		<navigation-case>
 			<from-outcome>index</from-outcome>
 			<to-view-id>/Index.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+		-->
 	<navigation-rule>
 		<display-name>CreateRide.xhtml</display-name>
 		<from-view-id>/CreateRide.xhtml</from-view-id>
