@@ -28,15 +28,16 @@
 					<td><h:inputText id="price" value="#{ridebean.price}"></h:inputText></td>
 				</tr>
 				<tr>
-					<td>Fecha (dd/MM/yyyy):</td>
+					<td>Fecha (con PrimeFaces):</td>
 					<td><p:calendar id="date" value="#{ridebean.date}"
 							navigator="true" pattern="dd/MM/yyyy" mode="inline" /></td>
-				</tr>
+				</tr> 
+
 			</table>
 			<p>
 				<h:commandButton value="Create" action="#{ridebean.crear}" />
-				<h:commandButton value="Close" action="#{indexbean.index}" />
-			</p>
+<!-- 				<h:commandButton value="Close" action="#{indexBean.index}" />
+ -->			</p>
 		</h:form>
 	</h:body>
 </f:view>

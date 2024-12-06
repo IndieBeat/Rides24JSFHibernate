@@ -96,6 +96,7 @@ public class CreateRideBean implements Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("LLega aqui");
 		return "ok";
 	}
 

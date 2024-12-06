@@ -1,15 +1,13 @@
 package modelo.beans;
 
-import java.io.Serializable;
+
 
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
 
-@Named("indexbean")
-@SessionScoped
-public class IndexBean implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
+@Named("indexBean")
+public class IndexBean{
+
 
 	public String createride() {
 		return "createRide";
