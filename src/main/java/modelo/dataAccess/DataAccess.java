@@ -16,6 +16,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+import modelo.JPAUtil;
 import modelo.configuration.UtilDate;
 import modelo.domain.Driver;
 import modelo.domain.Ride;
@@ -43,9 +44,10 @@ public class DataAccess {
 	 * dataBaseOpenMode of resources/config.xml file
 	 */
 	public void initializeDB() {
-
+		
 		try {
-
+			
+			this.em=JPAUtil.getEntityManager();
 			em.getTransaction().begin();
 
 			Calendar today = Calendar.getInstance();
@@ -63,21 +65,31 @@ public class DataAccess {
 			Driver driver3 = new Driver("driver3@gmail.com", "Test driver");
 
 			// Create rides
-			driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), 4, 7);
-			driver1.addRide("Donostia", "Gazteiz", UtilDate.newDate(year, month, 6), 4, 8);
-			driver1.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 25), 4, 4);
+			Ride r11=driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), 4, 7);
+			Ride r12=driver1.addRide("Donostia", "Gazteiz", UtilDate.newDate(year, month, 6), 4, 8);
+			Ride r13=driver1.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 25), 4, 4);
+			Ride r14=driver1.addRide("Donostia", "Iruña", UtilDate.newDate(year, month, 7), 4, 8);
 
-			driver1.addRide("Donostia", "Iruña", UtilDate.newDate(year, month, 7), 4, 8);
+			Ride r21=driver2.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), 3, 3);
+			Ride r22=driver2.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 25), 2, 5);
+			Ride r23=driver2.addRide("Eibar", "Gasteiz", UtilDate.newDate(year, month, 6), 2, 5);
 
-			driver2.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), 3, 3);
-			driver2.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 25), 2, 5);
-			driver2.addRide("Eibar", "Gasteiz", UtilDate.newDate(year, month, 6), 2, 5);
-
-			driver3.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 14), 1, 3);
+			Ride r31=driver3.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 14), 1, 3);
 
 			em.persist(driver1);
 			em.persist(driver2);
 			em.persist(driver3);
+
+			em.persist(r11);
+			em.persist(r12);
+			em.persist(r13);
+			em.persist(r14);
+
+			em.persist(r21);
+			em.persist(r22);
+			em.persist(r23);
+			
+			em.persist(r31);
 
 			em.getTransaction().commit();
 			System.out.println("Db initialized");
@@ -102,8 +114,7 @@ public class DataAccess {
 			e.printStackTrace();
 			return null;
 		} finally {
-			if (em.isOpen())
-				em.close();
+			em.close();
 		}
 	}
 
@@ -128,8 +139,7 @@ public class DataAccess {
 			e.printStackTrace();
 			return null;
 		} finally {
-			if (em.isOpen())
-				em.close();
+			em.close();
 		}
 	}
 
@@ -175,8 +185,7 @@ public class DataAccess {
 			em.getTransaction().commit();
 			return null;
 		} finally {
-			if (em.isOpen())
-				em.close();
+			em.close();
 		}
 
 	}
@@ -210,8 +219,7 @@ public class DataAccess {
 			e.printStackTrace();
 			return null;
 		} finally {
-			if (em.isOpen())
-				em.close();
+			em.close();
 		}
 	}
 
@@ -252,8 +260,7 @@ public class DataAccess {
 			e.printStackTrace();
 			return null;
 		} finally {
-			if (em.isOpen())
-				em.close();
+			em.close();
 		}
 	}
 

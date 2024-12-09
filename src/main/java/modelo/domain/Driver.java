@@ -13,7 +13,7 @@ public class Driver implements Serializable {
 	@Id 
 	private String email;
 	private String name;
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
+	@OneToMany(targetEntity=Ride.class, mappedBy = "driver", fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
 	private List<Ride> rides=new Vector<Ride>();
 
 	public Driver() {
@@ -71,7 +71,7 @@ public class Driver implements Serializable {
 	 */
 	public boolean doesRideExists(String from, String to, Date date)  {	
 		for (Ride r:rides)
-			if ( (java.util.Objects.equals(r.getFrom(),from)) && (java.util.Objects.equals(r.getTo(),to)) && (java.util.Objects.equals(r.getDate(),date)) )
+			if ( (java.util.Objects.equals(r.getOrigin(),from)) && (java.util.Objects.equals(r.getDestination(),to)) && (java.util.Objects.equals(r.getDate(),date)) )
 			 return true;
 		
 		return false;
@@ -97,7 +97,7 @@ public class Driver implements Serializable {
 		Ride r=null;
 		while (!found && index<=rides.size()) {
 			r=rides.get(++index);
-			if ( (java.util.Objects.equals(r.getFrom(),from)) && (java.util.Objects.equals(r.getTo(),to)) && (java.util.Objects.equals(r.getDate(),date)) )
+			if ( (java.util.Objects.equals(r.getOrigin(),from)) && (java.util.Objects.equals(r.getDestination(),to)) && (java.util.Objects.equals(r.getDate(),date)) )
 			found=true;
 		}
 			
