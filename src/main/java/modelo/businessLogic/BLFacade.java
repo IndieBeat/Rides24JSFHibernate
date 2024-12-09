@@ -54,12 +54,12 @@ public interface BLFacade  {
 	/**
 	 * This method retrieves the rides from two locations on a given date 
 	 * 
-	 * @param from the origin location of a ride
-	 * @param to the destination location of a ride
+	 * @param origin the origin location of a ride
+	 * @param destination the destination location of a ride
 	 * @param date the date of the ride 
 	 * @return collection of rides
 	 */
-	@WebMethod public List<Ride> getRides(String from, String to, Date date);
+	@WebMethod public List<Ride> getRides(String origin, String destination, Date date);
 	
 	/**
 	 * This method retrieves from the database the dates a month for which there are events
@@ -68,13 +68,15 @@ public interface BLFacade  {
 	 * @param date of the month for which days with rides want to be retrieved 
 	 * @return collection of rides
 	 */
-	@WebMethod public List<Date> getThisMonthDatesWithRides(String from, String to, Date date);
+	@WebMethod public List<Date> getThisMonthDatesWithRides(String origin, String destination, Date date);
 	
 	/**
 	 * This method calls the data access to initialize the database with some events and questions.
 	 * It is invoked only when the option "initialize" is declared in the tag dataBaseOpenMode of resources/config.xml file
 	 */	
 	@WebMethod public void initializeBD();
+	
+	@WebMethod public Driver getDriver(String email);
 
 	
 }

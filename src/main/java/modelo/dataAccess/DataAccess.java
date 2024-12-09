@@ -105,9 +105,12 @@ public class DataAccess {
 	 */
 	public List<String> getDepartCities() {
 		try {
+			this.em=JPAUtil.getEntityManager();
+			em.getTransaction().begin();
 			TypedQuery<String> query = em.createQuery("SELECT DISTINCT r.from FROM Ride r ORDER BY r.from",
 					String.class);
 			List<String> cities = query.getResultList();
+			em.getTransaction().commit();
 			return cities;
 
 		} catch (Exception e) {
@@ -127,6 +130,7 @@ public class DataAccess {
 	 */
 	public List<String> getArrivalCities(String from) {
 		try {
+			this.em=JPAUtil.getEntityManager();
 			em.getTransaction().begin();
 			TypedQuery<String> query = em.createQuery("SELECT DISTINCT r.to FROM Ride r WHERE r.from=?1 ORDER BY r.to",
 					String.class);
@@ -163,9 +167,11 @@ public class DataAccess {
 				+ " date " + date);
 		try {
 			if (new Date().compareTo(date) > 0) {
+				System.out.println("Error al crear ride con mala fecha");
 				throw new RideMustBeLaterThanTodayException(
 						ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
 			}
+			this.em=JPAUtil.getEntityManager();
 			em.getTransaction().begin();
 
 			Driver driver = em.find(Driver.class, driverEmail);
@@ -176,8 +182,12 @@ public class DataAccess {
 			}
 			Ride ride = driver.addRide(from, to, date, nPlaces, price);
 			// next instruction can be obviated
+			em.persist(ride);
 			em.persist(driver);
+			
+			System.out.println("Ride persisteado");
 			em.getTransaction().commit();
+			System.out.println("Ride commiteado");
 
 			return ride;
 		} catch (NullPointerException e) {
@@ -202,15 +212,19 @@ public class DataAccess {
 		System.out.println(">> DataAccess: getRides=> from= " + from + " to= " + to + " date " + date);
 
 		try {
+			this.em=JPAUtil.getEntityManager();
 			em.getTransaction().begin();
+			
 			List<Ride> res = new ArrayList<>();
 			TypedQuery<Ride> query = em.createQuery("SELECT r FROM Ride r WHERE r.from=?1 AND r.to=?2 AND r.date=?3",
 					Ride.class);
 			query.setParameter(1, from);
 			query.setParameter(2, to);
 			query.setParameter(3, date);
+			
 			List<Ride> rides = query.getResultList();
 			em.getTransaction().commit();
+			
 			for (Ride ride : rides) {
 				res.add(ride);
 			}
@@ -234,6 +248,7 @@ public class DataAccess {
 	 */
 	public List<Date> getThisMonthDatesWithRides(String from, String to, Date date) {
 		try {
+			this.em=JPAUtil.getEntityManager();
 			em.getTransaction().begin();
 
 			System.out.println(">> DataAccess: getEventsMonth");
@@ -250,8 +265,10 @@ public class DataAccess {
 			query.setParameter(2, to);
 			query.setParameter(3, firstDayMonthDate);
 			query.setParameter(4, lastDayMonthDate);
+			
 			List<Date> dates = query.getResultList();
 			em.getTransaction().commit();
+			
 			for (Date d : dates) {
 				res.add(d);
 			}
@@ -262,6 +279,24 @@ public class DataAccess {
 		} finally {
 			em.close();
 		}
+	}
+
+	public Driver getDriver(String email) {
+		try {
+			this.em=JPAUtil.getEntityManager();
+			em.getTransaction().begin();
+
+			Driver driver = em.find(Driver.class, email);
+			
+			em.getTransaction().commit();
+			return driver;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			em.close();
+		}
+		
+		return null;
 	}
 
 }

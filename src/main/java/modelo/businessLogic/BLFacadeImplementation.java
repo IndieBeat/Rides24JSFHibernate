@@ -75,5 +75,12 @@ public class BLFacadeImplementation  implements BLFacade {
 		dbManager.initializeDB();
 	}
 
+	@Override
+	public Driver getDriver(String email) {
+		// TODO Auto-generated method stub
+		Driver driver=dbManager.getDriver(email);
+		return driver;
+	}
+
 }
 

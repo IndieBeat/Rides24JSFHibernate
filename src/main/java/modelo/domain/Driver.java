@@ -65,13 +65,13 @@ public class Driver implements Serializable {
 	 * This method checks if the ride already exists for that driver
 	 * 
 	 * @param from the origin location 
-	 * @param to the destination location 
+	 * @param destination the destination location 
 	 * @param date the date of the ride 
 	 * @return true if the ride exists and false in other case
 	 */
-	public boolean doesRideExists(String from, String to, Date date)  {	
+	public boolean doesRideExists(String origin, String destination, Date date)  {	
 		for (Ride r:rides)
-			if ( (java.util.Objects.equals(r.getOrigin(),from)) && (java.util.Objects.equals(r.getDestination(),to)) && (java.util.Objects.equals(r.getDate(),date)) )
+			if ( (java.util.Objects.equals(r.getOrigin(),origin)) && (java.util.Objects.equals(r.getDestination(),destination)) && (java.util.Objects.equals(r.getDate(),date)) )
 			 return true;
 		
 		return false;
@@ -91,13 +91,13 @@ public class Driver implements Serializable {
 		return true;
 	}
 
-	public Ride removeRide(String from, String to, Date date) {
+	public Ride removeRide(String origin, String destination, Date date) {
 		boolean found=false;
 		int index=0;
 		Ride r=null;
 		while (!found && index<=rides.size()) {
 			r=rides.get(++index);
-			if ( (java.util.Objects.equals(r.getOrigin(),from)) && (java.util.Objects.equals(r.getDestination(),to)) && (java.util.Objects.equals(r.getDate(),date)) )
+			if ( (java.util.Objects.equals(r.getOrigin(),origin)) && (java.util.Objects.equals(r.getDestination(),destination)) && (java.util.Objects.equals(r.getDate(),date)) )
 			found=true;
 		}
 			

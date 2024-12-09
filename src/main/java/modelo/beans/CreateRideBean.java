@@ -33,7 +33,7 @@ public class CreateRideBean implements Serializable {
 	private List<Date> highlightedDates=new ArrayList<Date>();
 
 	public CreateRideBean() {
-		driver = new Driver("Test driver", "test");
+		this.driver = bl.getDriver("driver1@gmail.com");
 	}
 
 	public String getFrom() {
@@ -85,8 +85,6 @@ public class CreateRideBean implements Serializable {
 	}
 
 	public String crear() {
-		System.out.println(from + " " + to + " " + date + " " + seats + " " + price);
-
 		try {
 			bl.createRide(from, to, date, seats, price, driver.getEmail());
 		} catch (RideMustBeLaterThanTodayException e) {
@@ -95,7 +93,10 @@ public class CreateRideBean implements Serializable {
 		} catch (RideAlreadyExistException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
+		
 		System.out.println("LLega aqui");
 		return "ok";
 	}
