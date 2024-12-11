@@ -22,7 +22,7 @@ import modelo.businessLogic.BLFacadeImplementation;
 public class QueryBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private BLFacadeImplementation bl = BLFacadeImplementation.getInstance();
+	private BLFacadeImplementation bl;
 
 	private String origin;
 	private String destination;
@@ -34,6 +34,7 @@ public class QueryBean implements Serializable {
 	private String test;
 
 	public QueryBean() {
+		this.bl=BLFacadeImplementation.getInstance();
 		this.originList = bl.getDepartCities();
 		this.origin = originList.get(0);
 		this.destinationList = bl.getDestinationCities(this.origin);

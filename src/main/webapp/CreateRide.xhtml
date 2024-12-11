@@ -16,7 +16,7 @@
 					<td>Departing city:</td>
 					<td><h:inputText id="from" value="#{ridebean.from}"
 							required="true">
-							<f:validateRegex pattern="^[a-zA-Z\s]+$" />
+							<f:validateRegex pattern="^[a-zA-Z\s ]+$" />
 							<p:ajax event="blur" update="fromMessage" />
 						</h:inputText> <h:message id="fromMessage" for="from" style="color:red;" /></td>
 				</tr>
@@ -26,7 +26,7 @@
 					<td>Arrival city:</td>
 					<td><h:inputText id="to" value="#{ridebean.to}"
 							required="true">
-							<f:validateRegex pattern="^[a-zA-Z\s]+$" />
+							<f:validateRegex pattern="^[a-zA-Z\s ]+$" />
 							<p:ajax event="blur" update="toMessage" />
 						</h:inputText> <h:message id="toMessage" for="to" style="color:red;" /></td>
 				</tr>
@@ -47,6 +47,7 @@
 					<td><h:inputText id="price" value="#{ridebean.price}"
 							required="true">
 							<f:convertNumber pattern="#0.00" />
+							<f:validateLongRange minimum="1" maximum="100" />
 							<p:ajax event="blur" update="priceMessage" />
 						</h:inputText> <h:message id="priceMessage" for="price" style="color:red;" /></td>
 				</tr>
@@ -62,8 +63,12 @@
 			</table>
 
 			<p>
-				<h:commandButton value="Create" action="#{ridebean.crear}" />
-				<h:commandButton value="Close" action="#{indexBean.index}" immediate="true" />
+				<h:commandButton
+					onclick="return confirm('Are you sure you want to create this Ride?')"
+					value="Create" action="#{ridebean.crear}" />
+				<h:commandButton onclick="return confirm('Cancel current ride creation?')"
+					value="Close" action="#{ridebean.cancel}"
+					immediate="true" />
 			</p>
 		</h:form>
 	</h:body>

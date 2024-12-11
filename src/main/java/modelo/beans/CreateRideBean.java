@@ -23,10 +23,11 @@ public class CreateRideBean implements Serializable {
 	private float price;
 	private Driver driver;
 	
-	private BLFacadeImplementation bl=BLFacadeImplementation.getInstance();
+	private BLFacadeImplementation bl;
 	private List<Date> highlightedDates=new ArrayList<Date>();
 
 	public CreateRideBean() {
+		this.bl=BLFacadeImplementation.getInstance();
 		this.driver = bl.getDriver("driver1@gmail.com");
 	}
 
@@ -91,8 +92,20 @@ public class CreateRideBean implements Serializable {
 			e.printStackTrace();
 		}
 		
-		System.out.println("LLega aqui");
+		emptyForm();
 		return "ok";
 	}
 
+	public String cancel() {
+		emptyForm();
+		return "index";
+	}
+	
+	public void emptyForm() {
+		this.from="";
+		this.to="";
+		this.seats=0;
+		this.price=0f;
+		this.date=null;
+	}
 }
