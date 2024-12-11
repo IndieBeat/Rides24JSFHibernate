@@ -34,7 +34,7 @@ public class QueryBean implements Serializable {
 	private String test;
 
 	public QueryBean() {
-		this.bl=BLFacadeImplementation.getInstance();
+		this.bl=IndexBean.getInstance();
 		this.originList = bl.getDepartCities();
 		this.origin = originList.get(0);
 		this.destinationList = bl.getDestinationCities(this.origin);

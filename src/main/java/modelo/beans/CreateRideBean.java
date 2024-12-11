@@ -16,6 +16,8 @@ import jakarta.inject.Named;
 @SessionScoped
 public class CreateRideBean implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private BLFacadeImplementation bl;
+	
 	private String from;
 	private String to;
 	private int seats;
@@ -23,11 +25,10 @@ public class CreateRideBean implements Serializable {
 	private float price;
 	private Driver driver;
 	
-	private BLFacadeImplementation bl;
 	private List<Date> highlightedDates=new ArrayList<Date>();
 
 	public CreateRideBean() {
-		this.bl=BLFacadeImplementation.getInstance();
+		this.bl=IndexBean.getInstance();
 		this.driver = bl.getDriver("driver1@gmail.com");
 	}
 
