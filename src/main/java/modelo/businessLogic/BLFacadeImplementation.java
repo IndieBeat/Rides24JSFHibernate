@@ -41,24 +41,24 @@ public class BLFacadeImplementation  implements BLFacade {
     /**
      * {@inheritDoc}
      */
-	@WebMethod public List<String> getDestinationCities(String from){
-		return dbManager.getArrivalCities(from);		
+	@WebMethod public List<String> getDestinationCities(String origin){
+		return dbManager.getArrivalCities(origin);		
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
    @WebMethod
-   public Ride createRide( String from, String to, Date date, int nPlaces, float price, String driverEmail ) throws RideMustBeLaterThanTodayException, RideAlreadyExistException{
-	   return dbManager.createRide(from, to, date, nPlaces, price, driverEmail);
+   public Ride createRide( String origin, String destination, Date date, int nPlaces, float price, String driverEmail ) throws RideMustBeLaterThanTodayException, RideAlreadyExistException{
+	   return dbManager.createRide(origin, destination, date, nPlaces, price, driverEmail);
    };
 	
    /**
     * {@inheritDoc}
     */
 	@WebMethod 
-	public List<Ride> getRides(String from, String to, Date date){
-		return dbManager.getRides(from, to, date);
+	public List<Ride> getRides(String origin, String destination, Date date){
+		return dbManager.getRides(origin, destination, date);
 	}
 
     
@@ -66,8 +66,8 @@ public class BLFacadeImplementation  implements BLFacade {
 	 * {@inheritDoc}
 	 */
 	@WebMethod 
-	public List<Date> getThisMonthDatesWithRides(String from, String to, Date date){
-		return dbManager.getThisMonthDatesWithRides(from, to, date);
+	public List<Date> getThisMonthDatesWithRides(String origin, String destination, Date date){
+		return dbManager.getThisMonthDatesWithRides(origin, destination, date);
 	}
 
 	@Override

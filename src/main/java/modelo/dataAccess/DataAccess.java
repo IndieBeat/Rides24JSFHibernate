@@ -30,7 +30,9 @@ public class DataAccess {
 	private EntityManager em;
 
 	public DataAccess(Boolean initializeMode) {
-		initializeDB();
+		this.em=JPAUtil.getEntityManager();
+		if(initializeMode)
+			initializeDB();
 	}
 
 	public DataAccess() {
@@ -47,7 +49,6 @@ public class DataAccess {
 		
 		try {
 			
-			this.em=JPAUtil.getEntityManager();
 			em.getTransaction().begin();
 
 			Calendar today = Calendar.getInstance();
@@ -107,7 +108,7 @@ public class DataAccess {
 		try {
 			this.em=JPAUtil.getEntityManager();
 			em.getTransaction().begin();
-			TypedQuery<String> query = em.createQuery("SELECT DISTINCT r.from FROM Ride r ORDER BY r.from",
+			TypedQuery<String> query = em.createQuery("SELECT DISTINCT r.origin from Ride r ORDER BY r.origin",
 					String.class);
 			List<String> cities = query.getResultList();
 			em.getTransaction().commit();
@@ -125,16 +126,16 @@ public class DataAccess {
 	 * This method returns all the arrival destinations, from all rides that depart
 	 * from a given city
 	 * 
-	 * @param from the depart location of a ride
+	 * @param origin the depart location of a ride
 	 * @return all the arrival destinations
 	 */
-	public List<String> getArrivalCities(String from) {
+	public List<String> getArrivalCities(String origin) {
 		try {
 			this.em=JPAUtil.getEntityManager();
 			em.getTransaction().begin();
-			TypedQuery<String> query = em.createQuery("SELECT DISTINCT r.to FROM Ride r WHERE r.from=?1 ORDER BY r.to",
+			TypedQuery<String> query = em.createQuery("SELECT DISTINCT r.destination from Ride r WHERE r.origin=?1 ORDER BY r.destination",
 					String.class);
-			query.setParameter(1, from);
+			query.setParameter(1, origin);
 			List<String> arrivingCities = query.getResultList();
 			em.getTransaction().commit();
 			return arrivingCities;
@@ -150,8 +151,8 @@ public class DataAccess {
 	/**
 	 * This method creates a ride for a driver
 	 * 
-	 * @param from        the origin location of a ride
-	 * @param to          the destination location of a ride
+	 * @param origin        the origin location of a ride
+	 * @param destination          the destination location of a ride
 	 * @param date        the date of the ride
 	 * @param nPlaces     available seats
 	 * @param driverEmail to which ride is added
@@ -161,13 +162,12 @@ public class DataAccess {
 	 * @throws RideAlreadyExistException         if the same ride already exists for
 	 *                                           the driver
 	 */
-	public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail)
+	public Ride createRide(String origin, String destination, Date date, int nPlaces, float price, String driverEmail)
 			throws RideAlreadyExistException, RideMustBeLaterThanTodayException {
-		System.out.println(">> DataAccess: createRide=> from= " + from + " to= " + to + " driver=" + driverEmail
+		System.out.println(">> DataAccess: createRide=> origin= " + origin + " destination= " + destination + " driver=" + driverEmail
 				+ " date " + date);
 		try {
 			if (new Date().compareTo(date) > 0) {
-				System.out.println("Error al crear ride con mala fecha");
 				throw new RideMustBeLaterThanTodayException(
 						ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
 			}
@@ -175,19 +175,17 @@ public class DataAccess {
 			em.getTransaction().begin();
 
 			Driver driver = em.find(Driver.class, driverEmail);
-			if (driver.doesRideExists(from, to, date)) {
+			if (driver.doesRideExists(origin, destination, date)) {
 				em.getTransaction().commit();
 				throw new RideAlreadyExistException(
 						ResourceBundle.getBundle("Etiquetas").getString("DataAccess.RideAlreadyExist"));
 			}
-			Ride ride = driver.addRide(from, to, date, nPlaces, price);
+			Ride ride = driver.addRide(origin, destination, date, nPlaces, price);
 			// next instruction can be obviated
 			em.persist(ride);
 			em.persist(driver);
-			
-			System.out.println("Ride persisteado");
+
 			em.getTransaction().commit();
-			System.out.println("Ride commiteado");
 
 			return ride;
 		} catch (NullPointerException e) {
@@ -203,23 +201,23 @@ public class DataAccess {
 	/**
 	 * This method retrieves the rides from two locations on a given date
 	 * 
-	 * @param from the origin location of a ride
-	 * @param to   the destination location of a ride
+	 * @param origin the origin location of a ride
+	 * @param destination   the destination location of a ride
 	 * @param date the date of the ride
 	 * @return collection of rides
 	 */
-	public List<Ride> getRides(String from, String to, Date date) {
-		System.out.println(">> DataAccess: getRides=> from= " + from + " to= " + to + " date " + date);
+	public List<Ride> getRides(String origin, String destination, Date date) {
+		System.out.println(">> DataAccess: getRides=> origin= " + origin + " destination= " + destination + " date " + date);
 
 		try {
 			this.em=JPAUtil.getEntityManager();
 			em.getTransaction().begin();
 			
 			List<Ride> res = new ArrayList<>();
-			TypedQuery<Ride> query = em.createQuery("SELECT r FROM Ride r WHERE r.from=?1 AND r.to=?2 AND r.date=?3",
+			TypedQuery<Ride> query = em.createQuery("SELECT r from Ride r WHERE r.origin=?1 AND r.destination=?2 AND r.date=?3",
 					Ride.class);
-			query.setParameter(1, from);
-			query.setParameter(2, to);
+			query.setParameter(1, origin);
+			query.setParameter(2, destination);
 			query.setParameter(3, date);
 			
 			List<Ride> rides = query.getResultList();
@@ -241,12 +239,12 @@ public class DataAccess {
 	 * This method retrieves from the database the dates a month for which there are
 	 * events
 	 * 
-	 * @param from the origin location of a ride
-	 * @param to   the destination location of a ride
+	 * @param origin the origin location of a ride
+	 * @param destination   the destination location of a ride
 	 * @param date of the month for which days with rides want to be retrieved
 	 * @return collection of rides
 	 */
-	public List<Date> getThisMonthDatesWithRides(String from, String to, Date date) {
+	public List<Date> getThisMonthDatesWithRides(String origin, String destination, Date date) {
 		try {
 			this.em=JPAUtil.getEntityManager();
 			em.getTransaction().begin();
@@ -258,11 +256,11 @@ public class DataAccess {
 			Date lastDayMonthDate = UtilDate.lastDayMonth(date);
 
 			TypedQuery<Date> query = em.createQuery(
-					"SELECT DISTINCT r.date FROM Ride r WHERE r.from=?1 AND r.to=?2 AND r.date BETWEEN ?3 and ?4",
+					"SELECT DISTINCT r.date from Ride r WHERE r.origin=?1 AND r.destination=?2 AND r.date BETWEEN ?3 and ?4",
 					Date.class);
 
-			query.setParameter(1, from);
-			query.setParameter(2, to);
+			query.setParameter(1, origin);
+			query.setParameter(2, destination);
 			query.setParameter(3, firstDayMonthDate);
 			query.setParameter(4, lastDayMonthDate);
 			
