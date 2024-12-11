@@ -11,33 +11,60 @@
 	<h:body>
 		<h:form>
 			<table>
+
 				<tr>
 					<td>Departing city:</td>
-					<td><h:inputText id="from" value="#{ridebean.from}"></h:inputText></td>
+					<td><h:inputText id="from" value="#{ridebean.from}"
+							required="true">
+							<f:validateRegex pattern="^[a-zA-Z\s]+$" />
+							<p:ajax event="blur" update="fromMessage" />
+						</h:inputText> <h:message id="fromMessage" for="from" style="color:red;" /></td>
 				</tr>
+
+
 				<tr>
 					<td>Arrival city:</td>
-					<td><h:inputText id="to" value="#{ridebean.to}"></h:inputText></td>
+					<td><h:inputText id="to" value="#{ridebean.to}"
+							required="true">
+							<f:validateRegex pattern="^[a-zA-Z\s]+$" />
+							<p:ajax event="blur" update="toMessage" />
+						</h:inputText> <h:message id="toMessage" for="to" style="color:red;" /></td>
 				</tr>
+
+
 				<tr>
 					<td>Number of seats:</td>
-					<td><h:inputText id="seats" value="#{ridebean.seats}"></h:inputText></td>
+					<td><h:inputText id="seats" value="#{ridebean.seats}"
+							required="true">
+							<f:validateLongRange minimum="1" maximum="100" />
+							<p:ajax event="blur" update="seatsMessage" />
+						</h:inputText> <h:message id="seatsMessage" for="seats" style="color:red;" /></td>
 				</tr>
+
+
 				<tr>
 					<td>Price:</td>
-					<td><h:inputText id="price" value="#{ridebean.price}"></h:inputText></td>
+					<td><h:inputText id="price" value="#{ridebean.price}"
+							required="true">
+							<f:convertNumber pattern="#0.00" />
+							<p:ajax event="blur" update="priceMessage" />
+						</h:inputText> <h:message id="priceMessage" for="price" style="color:red;" /></td>
 				</tr>
+
+
 				<tr>
 					<td>Fecha (con PrimeFaces):</td>
 					<td><p:calendar id="date" value="#{ridebean.date}"
-							navigator="true" pattern="dd/MM/yyyy" mode="inline" /></td>
-				</tr> 
-
+							navigator="true" pattern="dd/MM/yyyy" required="true">
+							<p:ajax event="dateSelect" update="dateMessage" />
+						</p:calendar> <h:message id="dateMessage" for="date" style="color:red;" /></td>
+				</tr>
 			</table>
+
 			<p>
 				<h:commandButton value="Create" action="#{ridebean.crear}" />
-	 			<h:commandButton value="Close" action="#{indexBean.index}" />
- 			</p>
+				<h:commandButton value="Close" action="#{indexBean.index}" />
+			</p>
 		</h:form>
 	</h:body>
 </f:view>
