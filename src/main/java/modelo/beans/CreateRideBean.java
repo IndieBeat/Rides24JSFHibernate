@@ -2,20 +2,14 @@ package modelo.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import modelo.businessLogic.BLFacadeImplementation;
-import modelo.configuration.UtilDate;
 import modelo.domain.Driver;
-import modelo.domain.Ride;
 import modelo.exceptions.RideAlreadyExistException;
 import modelo.exceptions.RideMustBeLaterThanTodayException;
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
-import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 
 @Named("ridebean")
@@ -29,7 +23,7 @@ public class CreateRideBean implements Serializable {
 	private float price;
 	private Driver driver;
 	
-	private BLFacadeImplementation bl=new BLFacadeImplementation();
+	private BLFacadeImplementation bl=BLFacadeImplementation.getInstance();
 	private List<Date> highlightedDates=new ArrayList<Date>();
 
 	public CreateRideBean() {

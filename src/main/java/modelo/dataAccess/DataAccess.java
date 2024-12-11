@@ -29,14 +29,9 @@ import modelo.exceptions.RideMustBeLaterThanTodayException;
 public class DataAccess {
 	private EntityManager em;
 
-	public DataAccess(Boolean initializeMode) {
-		this.em=JPAUtil.getEntityManager();
-		if(initializeMode)
-			initializeDB();
-	}
-
 	public DataAccess() {
-		new DataAccess(false);
+		this.em=JPAUtil.getEntityManager();
+		initializeDB();
 	}
 
 	/**

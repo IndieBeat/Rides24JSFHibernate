@@ -1,42 +1,45 @@
 package modelo.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.primefaces.event.SelectEvent;
 
-import domain.Ride;
+import domain.Driver;
+import modelo.domain.Ride;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIOutput;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.inject.Named;
 import modelo.businessLogic.BLFacadeImplementation;
 
 @Named("querybean")
 @SessionScoped
-public class QueryBean implements Serializable{
+public class QueryBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private BLFacadeImplementation bl = BLFacadeImplementation.getInstance();
+
 	private String origin;
 	private String destination;
-
 	private Date date;
-	
-	private List<Ride> rides;
-	
+	private List<Ride> rides = new ArrayList<>();
 	private List<String> originList;
 	private List<String> destinationList;
-	
-	private BLFacadeImplementation bl=new BLFacadeImplementation();
+
+	private String test;
 
 	public QueryBean() {
-		this.originList=bl.getDepartCities();
-		this.origin=originList.get(0);
-		this.destinationList=bl.getDestinationCities(this.origin);
-		this.destination=destinationList.get(0);
+		this.originList = bl.getDepartCities();
+		this.origin = originList.get(0);
+		this.destinationList = bl.getDestinationCities(this.origin);
+		this.destination = destinationList.get(0);
 	}
-	
+
 	public String getOrigin() {
 		return origin;
 	}
@@ -84,11 +87,31 @@ public class QueryBean implements Serializable{
 	public void setDestinationList(List<String> destinationList) {
 		this.destinationList = destinationList;
 	}
-	
-	public void onItemSelectedListener(AjaxBehaviorEvent event){
-	    String origin = (String) ((UIOutput)event.getSource()).getValue();
 
-		this.destinationList=bl.getDestinationCities(origin);
-		this.destination=destinationList.get(0);
+	public void onItemSelectedListener(AjaxBehaviorEvent event) {
+		String origin = (String) ((UIOutput) event.getSource()).getValue();
+
+		this.destinationList = bl.getDestinationCities(origin);
+		this.destination = destinationList.get(0);
+	}
+
+	public void onDateSelect(SelectEvent event) {
+
+		Date fechaSelec = (Date) event.getObject();
+
+		rides = bl.getRides(origin, destination, fechaSelec);
+
+		if (rides.isEmpty()) {
+			FacesContext.getCurrentInstance().addMessage("myForm:mensajes",
+					new FacesMessage("No hay eventos para la fecha: " + event.getObject()));
+		}
+	}
+
+	public String getTest() {
+		return test;
+	}
+
+	public void setTest(String test) {
+		this.test = test;
 	}
 }

@@ -19,12 +19,18 @@ import modelo.exceptions.RideMustBeLaterThanTodayException;
 @WebService(endpointInterface = "businessLogic.BLFacade")
 public class BLFacadeImplementation  implements BLFacade {
 	DataAccess dbManager;
+	private static BLFacadeImplementation bl;
 
-	public BLFacadeImplementation()  {		
+	private BLFacadeImplementation()  {		
 		System.out.println("Creating BLFacadeImplementation instance");
-		
-		
-		    dbManager=new DataAccess();
+	    dbManager=new DataAccess();
+	}
+	
+	public static BLFacadeImplementation getInstance() {
+		if(bl==null) {
+			return new BLFacadeImplementation();
+		}
+		return bl;
 	}
 	
     public BLFacadeImplementation(DataAccess da)  {
